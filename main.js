@@ -26,7 +26,7 @@ function getData(html){
         let aTag = serachtool(topicArr[i]).find("a");
         let href = aTag.attr("href");
         let topicUrl = pageURL + href.substr(7) ;
-        //console.log(topicUrl);
+        console.log(topicUrl);
         reposPage.repoget(dirPath , topicUrl);
     }
 }
