@@ -3,16 +3,12 @@ let cheerio = require('cheerio');
 let fs = require('fs');
 let path = require('path');
 
-function getIssues(issuestab , topicFolder){
-    let arr = issuestab.split("/");
-    let filename = arr[1] + ".json";
-    let filepath = path.join(topicFolder , filename) ;
+getIssues(1);
+function getIssues(issuestab ){
 
-    let issuesURL = "https://github.com" + issuestab.trim() ;
-    if(fs.existsSync(filepath) == false){
-        fs.writeFileSync(filepath , "") ;
-    }
-    console.log(issuesURL);
+    //let issuesURL = "https://github.com" + issuestab.trim() ;
+    let issuesURL = "https://github.com/chromaui/learnstorybook.com/issues";
+    //console.log(issuesURL);
     request(issuesURL, cb);
 }
 
@@ -30,11 +26,12 @@ function readIssues(html){
     let searchtool = cheerio.load(html);
     let issuesArray = searchtool(".Link--primary.v-align-middle.no-underline.h4.js-navigation-open.markdown-title");
     console.log(issuesArray.length);
+    let arr  = []
     for(let i = 0 ; i < issuesArray.length ; ++i){
-        let issues = searchtool(issuesArray[0]).attr("href").trim();
-        console.log(issues);
+        let issue = searchtool(issuesArray[i]).attr("href").trim();
+        arr.push(issue);
     }
-
+    fs.writeFileSync("abc.json" , JSON.stringify(arr));
 }
 module.exports = {
     getIssues : getIssues
