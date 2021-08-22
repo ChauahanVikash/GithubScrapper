@@ -7,7 +7,7 @@ let issuesPage = require('./issuesPage');
 function repoget(dirPath , topicUrl){
     //mainfolder = path.join(dirPath , "Topics");
     //makedir(mainfolder);
-    console.log(topicUrl);
+    //console.log(topicUrl);
     request(topicUrl , cb);
 }
 
@@ -34,16 +34,22 @@ function getRepo(html){
         //let a = searchtool(issuestab)
         let issuestab = searchtool(navAnchors[1]).attr("href").trim();
         //issuesPage.getIssues(issuestab);
-        // let arr = issuestab.split("/");
-        // let filename = arr[1] + ".json";
-        // let filepath = path.join(topicFolder , filename);
-        //console.log(filename);
-        //console.log(issuestab);
-        //console.log(issuestab.length);
+        let issuesURL = "https://github.com" + issuestab.trim() ;
+        request(issuesURL , cb2);
     }
-    
+    function cb2(err , res , html){
+        if(err){
+            console.log("Error :" ,err);
+        }else if(res.statusCode == 400){
+            console.log("PAGE NOT FOUND");
+        }else{
+            issuesPage.readIssues(html , topicFolder );
+        }
+    }
 
 }
+
+
 
 function makedir(dirPath){
     if(fs.existsSync(dirPath) == false){
